@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">▲</div>
+            <span>Student<span>Hub</span></span>
+        </div>
+
+        <div class="profile-mini">
+            <div class="avatar">S</div>
+            <div>
+                <strong>Sakshi</strong>
+                <small>CSE Student</small>
+            </div>
+        </div>
+
+        <nav>
+
+            <a class="active" href="#">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="#tasks">
+                <span>✓</span>
+                My Tasks
+            </a>
+
+            <a href="#subjects">
+                <span>▣</span>
+                Subjects
+            </a>
+
+            <a href="#goals">
+                <span>🎯</span>
+                My Goals
+            </a>
+
+            <a href="#timer">
+                <span>◷</span>
+                Study Timer
+            </a>
+
+            <a href="#notes">
+                <span>📝</span>
+                Notes
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="tip-card">
+                <div class="tip-icon">🚀</div>
+                <strong>Keep Learning!</strong>
+                <p>Small progress every day.</p>
+            </div>
+
+            <a href="#" class="logout">
+                ↪ Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+                <span>⌕</span>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks, subjects..."
+                >
+            </div>
+
+            <button class="filter-btn">
+                Filter
+                <span>⌄</span>
+            </button>
+
+            <button class="notification">
+                ♧
+                <span></span>
+            </button>
+
+            <div class="top-avatar">
+                S
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <!-- Welcome -->
+
+            <div class="welcome-row">
+
+                <div>
+                    <p class="small-text">Wednesday, September 30</p>
+
+                    <h1>
+                        Welcome back, Sakshi! 👋
+                    </h1>
+
+                    <p class="subtitle">
+                        Let's make today productive.
+                    </p>
+                </div>
+
+                <button class="more-btn">•••</button>
+
+            </div>
+
+
+            <!-- ================= STATS ================= -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">✓</div>
+                    <div>
+                        <small>Tasks Completed</small>
+                        <h2 id="completedCount">8</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">◷</div>
+                    <div>
+                        <small>Study Hours</small>
+                        <h2>4.5h</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">🔥</div>
+                    <div>
+                        <small>Study Streak</small>
+                        <h2>7 Days</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ================= GRID ================= -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- SUBJECTS -->
+
+                <section class="panel subjects-panel" id="subjects">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>My Subjects</h2>
+                            <p>Your current learning progress</p>
+                        </div>
+
+                        <button class="more-btn">•••</button>
+
+                    </div>
+
+
+                    <div class="subjects">
+
+                        <div class="subject">
+
+                            <div class="subject-icon cpp">
+                                C++
+                            </div>
+
+                            <div class="subject-info">
+                                <strong>DSA</strong>
+                                <span>C++</span>
+
+                                <div class="progress">
+                                    <div style="width:78%"></div>
+                                </div>
+                            </div>
+
+                            <strong class="percentage">78%</strong>
+
+                        </div>
+
+
+                        <div class="subject">
+
+                            <div class="subject-icon js">
+                                JS
+                            </div>
+
+                            <div class="subject-info">
+                                <strong>JavaScript</strong>
+                                <span>Development</span>
+
+                                <div class="progress">
+                                    <div style="width:64%"></div>
+                                </div>
+                            </div>
+
+                            <strong class="percentage">64%</strong>
+
+                        </div>
+
+
+                        <div class="subject">
+
+                            <div class="subject-icon db">
+                                DB
+                            </div>
+
+                            <div class="subject-info">
+                                <strong>DBMS</strong>
+                                <span>CS Fundamentals</span>
+
+                                <div class="progress">
+                                    <div style="width:52%"></div>
+                                </div>
+                            </div>
+
+                            <strong class="percentage">52%</strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- EXAM COUNTDOWN -->
+
+                <section class="panel exam-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Next Exam</h2>
+                            <p>Keep preparing</p>
+                        </div>
+
+                        <span class="exam-icon">📚</span>
+
+                    </div>
+
+                    <div class="exam-card">
+
+                        <span class="exam-label">DBMS</span>
+
+                        <h2 id="countdown">
+                            18 Days
+                        </h2>
+
+                        <p>until your exam</p>
+
+                        <div class="exam-date">
+                            📅 October 18, 2026
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- TASKS -->
+
+                <section class="panel tasks-panel" id="tasks">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Today's Tasks</h2>
+                            <p>Stay on track</p>
+                        </div>
+
+                        <button id="addTaskBtn" class="add-btn">
+                            + Add Task
+                        </button>
+
+                    </div>
+
+
+                    <div id="taskList">
+
+                        <div class="task completed-task">
+                            <label>
+                                <input type="checkbox" checked>
+                                <span>Solve 2 DSA problems</span>
+                            </label>
+
+                            <span class="task-time">45 min</span>
+                        </div>
+
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Practice JavaScript</span>
+                            </label>
+
+                            <span class="task-time">1 hr</span>
+                        </div>
+
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Revise DBMS</span>
+                            </label>
+
+                            <span class="task-time">45 min</span>
+                        </div>
+
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Work on StudentHub</span>
+                            </label>
+
+                            <span class="task-time">1 hr</span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- STUDY TIMER -->
+
+                <section class="panel timer-panel" id="timer">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Study Timer</h2>
+                            <p>Pomodoro session</p>
+                        </div>
+
+                        <span>⏱️</span>
+
+                    </div>
+
+
+                    <div class="timer">
+
+                        <div class="timer-circle">
+
+                            <div>
+                                <strong id="timerDisplay">
+                                    25:00
+                                </strong>
+
+                                <small>
+                                    Focus
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="timer-buttons">
+
+                            <button id="startTimer">
+                                Start
+                            </button>
+
+                            <button id="resetTimer">
+                                Reset
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- GOALS -->
+
+                <section class="panel goals-panel" id="goals">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>My Goals</h2>
+                            <p>What you're working towards</p>
+                        </div>
+
+                        <span>🎯</span>
+
+                    </div>
+
+
+                    <div class="goal">
+
+                        <div class="goal-top">
+                            <strong>Complete MERN Stack</strong>
+                            <span>65%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div style="width:65%"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal">
+
+                        <div class="goal-top">
+                            <strong>Solve 200 DSA Problems</strong>
+                            <span>42%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div style="width:42%"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="goal">
+
+                        <div class="goal-top">
+                            <strong>Build 3 Projects</strong>
+                            <span>33%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div style="width:33%"></div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
