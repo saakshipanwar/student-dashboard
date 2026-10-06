@@ -1,211 +1,85 @@
-// ========================================
-// TASK SYSTEM
-// ========================================
+
+ // ========================================
+ // TASK SYSTEM - SECURE VERSION
+ // ========================================
 
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const completedCount = document.getElementById("completedCount");
 
 function updateTaskCount() {
-
-    const completed =
-        document.querySelectorAll(
-            '.task input[type="checkbox"]:checked'
-        ).length;
+    const completed = taskList.querySelectorAll(
+        '.task input[type="checkbox"]:checked'
+    ).length;
 
     completedCount.textContent = completed;
 }
 
+function updateTaskStyle(checkbox) {
+    const taskText = checkbox.parentElement.querySelector("span");
 
-document.querySelectorAll(".task input").forEach(input => {
+    if (!taskText) return;
 
-    input.addEventListener("change", function () {
+    if (checkbox.checked) {
+        taskText.style.textDecoration = "line-through";
+        taskText.style.color = "#aaa";
+    } else {
+        taskText.style.textDecoration = "none";
+        taskText.style.color = "#20202b";
+    }
+}
 
-        const taskText =
-            this.parentElement.querySelector("span");
-
-        if (this.checked) {
-            taskText.style.textDecoration = "line-through";
-            taskText.style.color = "#aaa";
-        } else {
-            taskText.style.textDecoration = "none";
-            taskText.style.color = "#20202b";
-        }
-
+// Existing tasks ke checkbox handlers
+taskList.querySelectorAll('.task input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+        updateTaskStyle(this);
         updateTaskCount();
     });
-
 });
 
-
 addTaskBtn.addEventListener("click", function () {
-
     const taskName = prompt("Enter your task:");
 
-    if (!taskName || taskName.trim() === "") {
+    if (taskName === null || taskName.trim() === "") {
         return;
     }
 
+    // Task container
     const task = document.createElement("div");
-
     task.className = "task";
 
-    task.innerHTML = `
-        <label>
-            <input type="checkbox">
-            <span>${taskName}</span>
-        </label>
+    // Label
+    const label = document.createElement("label");
 
-        <span class="task-time">
-            New
-        </span>
-    `;
+    // Checkbox
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    // Safe text insertion: HTML execute nahi hoga
+    const text = document.createElement("span");
+    text.textContent = taskName.trim();
+
+    // Task time
+    const taskTime = document.createElement("span");
+    taskTime.className = "task-time";
+    taskTime.textContent = "New";
+
+    // Elements ko assemble karo
+    label.appendChild(checkbox);
+    label.appendChild(text);
+
+    task.appendChild(label);
+    task.appendChild(taskTime);
 
     taskList.appendChild(task);
 
-    const checkbox =
-        task.querySelector("input");
-
     checkbox.addEventListener("change", function () {
-
-        const text =
-            task.querySelector("label span");
-
-        if (this.checked) {
-            text.style.textDecoration = "line-through";
-            text.style.color = "#aaa";
-        } else {
-            text.style.textDecoration = "none";
-            text.style.color = "#20202b";
-        }
-
+        updateTaskStyle(this);
         updateTaskCount();
     });
 
+    updateTaskCount();
 });
 
-
-// ========================================
-// POMODORO TIMER
-// ========================================
-
-let timeLeft = 25 * 60;
-let timerInterval = null;
-
-const timerDisplay =
-    document.getElementById("timerDisplay");
-
-const startTimer =
-    document.getElementById("startTimer");
-
-const resetTimer =
-    document.getElementById("resetTimer");
-
-
-function updateTimerDisplay() {
-
-    const minutes =
-        Math.floor(timeLeft / 60);
-
-    const seconds =
-        timeLeft % 60;
-
-    timerDisplay.textContent =
-        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-}
-
-
-startTimer.addEventListener("click", function () {
-
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-
-        startTimer.textContent = "Start";
-
-        return;
-    }
-
-    startTimer.textContent = "Pause";
-
-    timerInterval = setInterval(() => {
-
-        if (timeLeft <= 0) {
-
-            clearInterval(timerInterval);
-
-            timerInterval = null;
-
-            alert("🎉 Focus session completed!");
-
-            startTimer.textContent = "Start";
-
-            timeLeft = 25 * 60;
-
-            updateTimerDisplay();
-
-            return;
-        }
-
-        timeLeft--;
-
-        updateTimerDisplay();
-
-    }, 1000);
-
-});
-
-
-resetTimer.addEventListener("click", function () {
-
-    clearInterval(timerInterval);
-
-    timerInterval = null;
-
-    timeLeft = 25 * 60;
-
-    updateTimerDisplay();
-
-    startTimer.textContent = "Start";
-
-});
-
-
-// ========================================
-// SEARCH
-// ========================================
-
-const searchInput =
-    document.getElementById("searchInput");
-
-
-searchInput.addEventListener("input", function () {
-
-    const search =
-        this.value.toLowerCase();
-
-    const tasks =
-        document.querySelectorAll(".task");
-
-    tasks.forEach(task => {
-
-        const text =
-            task.innerText.toLowerCase();
-
-        if (text.includes(search)) {
-            task.style.display = "flex";
-        } else {
-            task.style.display = "none";
-        }
-
-    });
-
-});
-
-
-// ========================================
-// INITIALIZE
-// ========================================
-
+// Initial count
 updateTaskCount();
-updateTimerDisplay();
