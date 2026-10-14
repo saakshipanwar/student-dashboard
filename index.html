@@ -1,81 +1,386 @@
+\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentHub Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-<!-- MY NOTES SECTION -->
-<section class="panel" id="notes">
+<body>
+<div class="app">
 
-    <div class="panel-header">
-        <div>
-            <h2>📝 My Notes</h2>
-            <p>Create and organize your study notes</p>
-        </div>
-        <span>📚</span>
-    </div>
-
-    <form id="noteForm">
-
-        <div style="margin-bottom: 15px;">
-            <label for="noteTitle">Note Title</label>
-            <input
-                type="text"
-                id="noteTitle"
-                placeholder="e.g. DBMS Normalization"
-                required
-                style="width:100%; padding:12px; margin-top:8px;"
-            >
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">▲</div>
+            <span>Student<span>Hub</span></span>
         </div>
 
-        <div style="margin-bottom: 15px;">
-            <label for="noteSubject">Select Subject</label>
-            <select
-                id="noteSubject"
-                required
-                style="width:100%; padding:12px; margin-top:8px;"
-            >
-                <option value="">Choose subject</option>
-                <option value="DSA">DSA / C++</option>
-                <option value="DBMS">DBMS</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="MERN">MERN Stack</option>
-                <option value="Other">Other</option>
-            </select>
+        <div class="profile-mini">
+            <div class="avatar">S</div>
+            <div>
+                <strong>Sakshi</strong>
+                <small>CSE Student</small>
+            </div>
         </div>
 
-        <div style="margin-bottom: 15px;">
-            <label for="noteContent">Write Your Notes</label>
-            <textarea
-                id="noteContent"
-                rows="6"
-                placeholder="Write your study notes here..."
-                required
-                style="width:100%; padding:12px; margin-top:8px; resize:vertical;"
-            ></textarea>
+        <nav>
+            <a class="active" href="#">
+                <span>⌂</span> Dashboard
+            </a>
+            <a href="#tasks"><span>✓</span> My Tasks</a>
+            <a href="#subjects"><span>▣</span> Subjects</a>
+            <a href="#goals"><span>🎯</span> My Goals</a>
+            <a href="#timer"><span>◷</span> Study Timer</a>
+            <a href="#notes"><span>📝</span> Notes</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="tip-card">
+                <div class="tip-icon">🚀</div>
+                <strong>Keep Learning!</strong>
+                <p>Small progress every day.</p>
+            </div>
+            <a href="#" class="logout">↪ Logout</a>
         </div>
+    </aside>
 
-        <button type="submit" id="saveNoteBtn">
-            + Save Note
-        </button>
+    <!-- MAIN CONTENT -->
+    <main class="main">
 
-    </form>
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="search-box">
+                <span>⌕</span>
+                <input type="text" id="searchInput"
+                       placeholder="Search tasks, subjects...">
+            </div>
 
-    <hr style="margin:25px 0;">
+            <button class="filter-btn" type="button">
+                Filter <span>⌄</span>
+            </button>
 
-    <div class="panel-header">
-        <div>
-            <h2>Saved Notes</h2>
-            <p>Your notes will appear here</p>
-        </div>
-    </div>
+            <button class="notification" type="button" aria-label="Notifications">
+                ♧ <span></span>
+            </button>
 
-    <input
-        type="search"
-        id="notesSearch"
-        placeholder="Search your notes..."
-        style="width:100%; padding:12px; margin-bottom:15px;"
-    >
+            <div class="top-avatar">S</div>
+        </header>
 
-    <div id="notesList">
-        <p id="notesEmptyState">
-            📚 No notes yet. Create your first note!
-        </p>
-    </div>
+        <!-- DASHBOARD -->
+        <section class="content" id="dashboard">
 
-</section>
+            <div class="welcome-row">
+                <div>
+                    <p class="small-text" id="currentDate">My Study Dashboard</p>
+                    <h1>Welcome back, Sakshi! 👋</h1>
+                    <p class="subtitle">Let's make today productive.</p>
+                </div>
+                <button class="more-btn" type="button">•••</button>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon purple">✓</div>
+                    <div>
+                        <small>Tasks Completed</small>
+                        <h2 id="completedCount">0</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">◷</div>
+                    <div>
+                        <small>Study Hours</small>
+                        <h2 id="studyHours">0h</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">🔥</div>
+                    <div>
+                        <small>Study Streak</small>
+                        <h2>Keep Going</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD GRID -->
+            <div class="dashboard-grid">
+
+                <!-- SUBJECTS -->
+                <section class="panel subjects-panel" id="subjects">
+                    <div class="panel-header">
+                        <div>
+                            <h2>My Subjects</h2>
+                            <p>Your current learning progress</p>
+                        </div>
+                    </div>
+
+                    <div class="subjects">
+                        <div class="subject">
+                            <div class="subject-icon cpp">C++</div>
+                            <div class="subject-info">
+                                <strong>DSA</strong>
+                                <span>C++</span>
+                                <div class="progress">
+                                    <div style="width:78%"></div>
+                                </div>
+                            </div>
+                            <strong class="percentage">78%</strong>
+                        </div>
+
+                        <div class="subject">
+                            <div class="subject-icon js">JS</div>
+                            <div class="subject-info">
+                                <strong>JavaScript</strong>
+                                <span>Development</span>
+                                <div class="progress">
+                                    <div style="width:64%"></div>
+                                </div>
+                            </div>
+                            <strong class="percentage">64%</strong>
+                        </div>
+
+                        <div class="subject">
+                            <div class="subject-icon db">DB</div>
+                            <div class="subject-info">
+                                <strong>DBMS</strong>
+                                <span>CS Fundamentals</span>
+                                <div class="progress">
+                                    <div style="width:52%"></div>
+                                </div>
+                            </div>
+                            <strong class="percentage">52%</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EXAM COUNTDOWN -->
+                <section class="panel exam-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Next Exam</h2>
+                            <p>Keep preparing</p>
+                        </div>
+                        <span class="exam-icon">📚</span>
+                    </div>
+
+                    <div class="exam-card">
+                        <span class="exam-label">DBMS</span>
+                        <h2 id="countdown">Upcoming</h2>
+                        <p>Check your exam schedule</p>
+                        <div class="exam-date">📅 Exam date</div>
+                    </div>
+                </section>
+
+                <!-- TASKS -->
+                <section class="panel tasks-panel" id="tasks">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Today's Tasks</h2>
+                            <p>Stay on track</p>
+                        </div>
+                        <button id="addTaskBtn" class="add-btn" type="button">
+                            + Add Task
+                        </button>
+                    </div>
+
+                    <div id="taskList">
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Solve 2 DSA problems</span>
+                            </label>
+                            <span class="task-time">45 min</span>
+                        </div>
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Practice JavaScript</span>
+                            </label>
+                            <span class="task-time">1 hr</span>
+                        </div>
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Revise DBMS</span>
+                            </label>
+                            <span class="task-time">45 min</span>
+                        </div>
+
+                        <div class="task">
+                            <label>
+                                <input type="checkbox">
+                                <span>Work on StudentHub</span>
+                            </label>
+                            <span class="task-time">1 hr</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STUDY TIMER -->
+                <section class="panel timer-panel" id="timer">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Study Timer</h2>
+                            <p>Pomodoro session</p>
+                        </div>
+                        <span>⏱️</span>
+                    </div>
+
+                    <div class="timer">
+                        <div class="timer-circle">
+                            <div>
+                                <strong id="timerDisplay">25:00</strong>
+                                <small>Focus</small>
+                            </div>
+                        </div>
+
+                        <div class="timer-buttons">
+                            <button id="startTimer" type="button">Start</button>
+                            <button id="resetTimer" type="button">Reset</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- GOALS -->
+                <section class="panel goals-panel" id="goals">
+                    <div class="panel-header">
+                        <div>
+                            <h2>My Goals</h2>
+                            <p>What you're working towards</p>
+                        </div>
+                        <span>🎯</span>
+                    </div>
+
+                    <div class="goal">
+                        <div class="goal-top">
+                            <strong>Complete MERN Stack</strong>
+                            <span>65%</span>
+                        </div>
+                        <div class="progress">
+                            <div style="width:65%"></div>
+                        </div>
+                    </div>
+
+                    <div class="goal">
+                        <div class="goal-top">
+                            <strong>Solve 200 DSA Problems</strong>
+                            <span>42%</span>
+                        </div>
+                        <div class="progress">
+                            <div style="width:42%"></div>
+                        </div>
+                    </div>
+
+                    <div class="goal">
+                        <div class="goal-top">
+                            <strong>Build 3 Projects</strong>
+                            <span>33%</span>
+                        </div>
+                        <div class="progress">
+                            <div style="width:33%"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </section>
+
+        <!-- SUBJECT-WISE NOTES LIBRARY -->
+        <section class="panel notes-panel" id="notes">
+
+            <div class="panel-header">
+                <div>
+                    <h2>📚 My Notes Library</h2>
+                    <p>Keep every subject's notes separate and organized.</p>
+                </div>
+                <span>📝</span>
+            </div>
+
+            <!-- ALL SUBJECT FOLDERS -->
+            <div id="notesHome">
+                <h3>My Subjects</h3>
+                <p>Select a subject to view or create notes.</p>
+
+                <div id="subjectFolders" class="subject-folders"></div>
+            </div>
+
+            <!-- SELECTED SUBJECT -->
+            <div id="subjectNotesView" hidden>
+
+                <button type="button" id="backToSubjects">
+                    ← All Subjects
+                </button>
+
+                <div class="panel-header">
+                    <div>
+                        <h2 id="currentSubjectTitle">Subject Notes</h2>
+                        <p id="currentSubjectDescription">
+                            Your notes for this subject.
+                        </p>
+                    </div>
+                </div>
+
+                <button type="button" id="newNoteBtn">
+                    + Create New Note
+                </button>
+
+                <!-- CREATE / EDIT NOTE -->
+                <form id="noteForm" hidden>
+                    <div class="note-field">
+                        <label for="noteTitle">Note Title</label>
+                        <input
+                            id="noteTitle"
+                            type="text"
+                            maxlength="100"
+                            placeholder="e.g. Normalization"
+                            required
+                        >
+                    </div>
+
+                    <div class="note-field">
+                        <label for="noteContent">Write Your Notes</label>
+                        <textarea
+                            id="noteContent"
+                            rows="7"
+                            maxlength="10000"
+                            placeholder="Write concepts, examples and revision points..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" id="saveNoteBtn">Save Note</button>
+                    <button type="button" id="cancelNoteBtn">Cancel</button>
+                </form>
+
+                <!-- SEARCH NOTES -->
+                <div class="note-field" style="margin-top:20px;">
+                    <label for="notesSearch">Search in this subject</label>
+                    <input
+                        id="notesSearch"
+                        type="search"
+                        placeholder="Search your notes..."
+                    >
+                </div>
+
+                <p id="notesCount">0 notes</p>
+
+                <!-- NOTES APPEAR HERE -->
+                <div id="notesList" class="notes-list" aria-live="polite"></div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
