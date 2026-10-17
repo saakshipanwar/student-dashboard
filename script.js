@@ -583,4 +583,329 @@
   updateStudyHours();
   renderStreak();
   renderTasks();
+  
+  // ---------- SUBJECT-WISE NOTES LIBRARY ----------
+
+  const NOTES_STORE = "studentHub.subjectNotes.v1";
+
+  const NOTE_SUBJECTS = [
+    { name: "DBMS", icon: "🗄️" },
+    { name: "DSA / C++", icon: "💻" },
+    { name: "JavaScript", icon: "🟨" },
+    { name: "MERN Stack", icon: "🌐" },
+    { name: "Other", icon: "📁" }
+  ];
+
+  const subjectFolders = document.querySelector("#subjectFolders");
+  const notesHome = document.querySelector("#notesHome");
+  const subjectNotesView = document.querySelector("#subjectNotesView");
+  const currentSubjectTitle = document.querySelector("#currentSubjectTitle");
+  const currentSubjectDescription = document.querySelector("#currentSubjectDescription");
+  const backToSubjects = document.querySelector("#backToSubjects");
+  const newNoteBtn = document.querySelector("#newNoteBtn");
+  const noteForm = document.querySelector("#noteForm");
+  const noteTitle = document.querySelector("#noteTitle");
+  const noteContent = document.querySelector("#noteContent");
+  const cancelNoteBtn = document.querySelector("#cancelNoteBtn");
+  const notesSearch = document.querySelector("#notesSearch");
+  const notesCount = document.querySelector("#notesCount");
+  const notesList = document.querySelector("#notesList");
+  const saveNoteBtn = document.querySelector("#saveNoteBtn");
+
+  function loadNotes() {
+    try {
+      const data = JSON.parse(
+        localStorage.getItem(NOTES_STORE) || "{}"
+      );
+
+      NOTE_SUBJECTS.forEach(subject => {
+        if (!Array.isArray(data[subject.name])) {
+          data[subject.name] = [];
+        }
+      });
+
+      return data;
+    } catch {
+      const data = {};
+      NOTE_SUBJECTS.forEach(subject => {
+        data[subject.name] = [];
+      });
+      return data;
+    }
+  }
+
+  let noteData = loadNotes();
+  let activeNoteSubject = null;
+  let editingNoteId = null;
+
+  function saveNotes() {
+    try {
+      localStorage.setItem(NOTES_STORE, JSON.stringify(noteData));
+      return true;
+    } catch {
+      alert("Notes save nahi ho paye. Browser storage check karo.");
+      return false;
+    }
+  }
+
+  function noteId() {
+    return window.crypto?.randomUUID
+      ? window.crypto.randomUUID()
+      : "note-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+  }
+
+  function renderSubjectFolders() {
+    if (!subjectFolders) return;
+
+    subjectFolders.replaceChildren();
+
+    NOTE_SUBJECTS.forEach(subject => {
+      const notes = noteData[subject.name] || [];
+      const folder = document.createElement("button");
+
+      folder.type = "button";
+      folder.className = "subject-folder";
+
+      const icon = document.createElement("span");
+      icon.className = "folder-icon";
+      icon.textContent = subject.icon;
+
+      const title = document.createElement("h4");
+      title.textContent = subject.name;
+
+      const count = document.createElement("span");
+      count.className = "folder-count";
+      count.textContent =
+        `${notes.length} ${notes.length === 1 ? "note" : "notes"}`;
+
+      folder.append(icon, title, count);
+
+      folder.addEventListener("click", () => {
+        openNotesSubject(subject.name);
+      });
+
+      subjectFolders.appendChild(folder);
+    });
+  }
+
+  function openNotesSubject(subjectName) {
+    activeNoteSubject = subjectName;
+    editingNoteId = null;
+
+    if (notesHome) notesHome.hidden = true;
+    if (subjectNotesView) subjectNotesView.hidden = false;
+
+    if (currentSubjectTitle) {
+      currentSubjectTitle.textContent = subjectName + " Notes";
+    }
+
+    if (currentSubjectDescription) {
+      currentSubjectDescription.textContent =
+        "Create, save and manage your subject notes.";
+    }
+
+    if (notesSearch) notesSearch.value = "";
+
+    closeNoteForm();
+    renderNotesList();
+  }
+
+  function showAllNoteSubjects() {
+    activeNoteSubject = null;
+    closeNoteForm();
+
+    if (subjectNotesView) subjectNotesView.hidden = true;
+    if (notesHome) notesHome.hidden = false;
+
+    renderSubjectFolders();
+  }
+
+  function openNoteForm(note = null) {
+    if (!noteForm || !noteTitle || !noteContent) return;
+
+    editingNoteId = note ? note.id : null;
+    noteTitle.value = note ? note.title : "";
+    noteContent.value = note ? note.content : "";
+
+    noteForm.hidden = false;
+
+    if (saveNoteBtn) {
+      saveNoteBtn.textContent = note ? "Update Note" : "Save Note";
+    }
+
+    noteForm.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+
+    noteTitle.focus();
+  }
+
+  function closeNoteForm() {
+    if (noteForm) {
+      noteForm.reset();
+      noteForm.hidden = true;
+    }
+
+    editingNoteId = null;
+
+    if (saveNoteBtn) {
+      saveNoteBtn.textContent = "Save Note";
+    }
+  }
+
+  function renderNotesList() {
+    if (!notesList || !activeNoteSubject) return;
+
+    notesList.replaceChildren();
+
+    const query = (notesSearch?.value || "").trim().toLowerCase();
+
+    const allNotes = noteData[activeNoteSubject] || [];
+
+    const filteredNotes = allNotes
+      .filter(note =>
+        `${note.title} ${note.content}`.toLowerCase().includes(query)
+      )
+      .sort((a, b) =>
+        new Date(b.updatedAt || b.createdAt) -
+        new Date(a.updatedAt || a.createdAt)
+      );
+
+    if (notesCount) {
+      notesCount.textContent =
+        `${filteredNotes.length} ${filteredNotes.length === 1 ? "note" : "notes"}`;
+    }
+
+    if (filteredNotes.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "notes-empty";
+      empty.textContent = query
+        ? "No matching notes found."
+        : "No notes yet. Click Create New Note to add one.";
+
+      notesList.appendChild(empty);
+      return;
+    }
+
+    filteredNotes.forEach(note => {
+      const card = document.createElement("article");
+      card.className = "note-card";
+
+      const heading = document.createElement("h3");
+      heading.className = "note-card-title";
+      heading.textContent = note.title;
+
+      const content = document.createElement("p");
+      content.className = "note-card-content";
+      content.textContent = note.content;
+      content.style.whiteSpace = "pre-wrap";
+
+      const date = document.createElement("small");
+      date.className = "note-date";
+      date.textContent =
+        "Updated: " +
+        new Date(note.updatedAt || note.createdAt).toLocaleDateString();
+
+      const actions = document.createElement("div");
+      actions.className = "note-actions";
+
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "note-edit-btn";
+      editBtn.textContent = "Edit";
+
+      editBtn.addEventListener("click", () => {
+        openNoteForm(note);
+      });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "note-delete-btn";
+      deleteBtn.textContent = "Delete";
+
+      deleteBtn.addEventListener("click", () => {
+        if (!confirm(`Delete "${note.title}"?`)) return;
+
+        noteData[activeNoteSubject] =
+          noteData[activeNoteSubject].filter(item => item.id !== note.id);
+
+        if (saveNotes()) {
+          renderNotesList();
+          renderSubjectFolders();
+        }
+      });
+
+      actions.append(editBtn, deleteBtn);
+      card.append(heading, date, content, actions);
+      notesList.appendChild(card);
+    });
+  }
+
+  if (newNoteBtn) {
+    newNoteBtn.addEventListener("click", () => openNoteForm());
+  }
+
+  if (cancelNoteBtn) {
+    cancelNoteBtn.addEventListener("click", closeNoteForm);
+  }
+
+  if (backToSubjects) {
+    backToSubjects.addEventListener("click", showAllNoteSubjects);
+  }
+
+  if (notesSearch) {
+    notesSearch.addEventListener("input", renderNotesList);
+  }
+
+  if (noteForm) {
+    noteForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!activeNoteSubject) {
+        alert("Please select a subject first.");
+        return;
+      }
+
+      const title = noteTitle.value.trim();
+      const content = noteContent.value.trim();
+
+      if (!title || !content) {
+        alert("Please enter both the title and note content.");
+        return;
+      }
+
+      const now = new Date().toISOString();
+      const subjectNotes = noteData[activeNoteSubject];
+
+      if (editingNoteId) {
+        const existing = subjectNotes.find(
+          note => note.id === editingNoteId
+        );
+
+        if (existing) {
+          existing.title = title;
+          existing.content = content;
+          existing.updatedAt = now;
+        }
+      } else {
+        subjectNotes.unshift({
+          id: noteId(),
+          title,
+          content,
+          createdAt: now,
+          updatedAt: now
+        });
+      }
+
+      if (saveNotes()) {
+        closeNoteForm();
+        renderNotesList();
+        renderSubjectFolders();
+      }
+    });
+  }
+
+  renderSubjectFolders();
+
 })();
